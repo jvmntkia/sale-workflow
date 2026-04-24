@@ -4,28 +4,29 @@ from odoo.tests.common import TransactionCase
 
 
 class TestResPartner(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.partner_model = self.env["res.partner"].with_context(test_propagation=True)
-        self.salesperson = self.env["res.users"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.partner_model = cls.env["res.partner"].with_context(test_propagation=True)
+        cls.salesperson = cls.env["res.users"].create(
             {
                 "name": "Test Salesperson",
                 "login": "sales@test.com",
             }
         )
-        self.team = self.env["crm.team"].create({"name": "Sales Team A"})
-        self.parent_partner = self.partner_model.create(
+        cls.team = cls.env["crm.team"].create({"name": "Sales Team A"})
+        cls.parent_partner = cls.partner_model.create(
             {
                 "name": "Company A",
                 "company_type": "company",
-                "user_id": self.salesperson.id,
-                "team_id": self.team.id,
+                "user_id": cls.salesperson.id,
+                "team_id": cls.team.id,
             }
         )
-        self.child_contact = self.partner_model.create(
+        cls.child_contact = cls.partner_model.create(
             {
                 "name": "Child Contact",
-                "parent_id": self.parent_partner.id,
+                "parent_id": cls.parent_partner.id,
             }
         )
 
